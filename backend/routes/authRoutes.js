@@ -61,4 +61,21 @@ router.post("/login",async(req,res)=>{
 }
    
 })
+router.post("/refresh",async(req,res)=>{
+const cookie=req.cookies.refreshToken;
+if(!cookie){
+    return res.status(401).json({message:"cookie doesnt exist"});
+}
+try{
+const verification=jwt.verify(cookie,process.env.JWT_REFRESH_SECRET);
+const userid=verification.userid;
+const newaccessToken=jwt.sign({userid:userid},process.env.JWT_ACCESS_SECRET,{expiresIn:"15m"});
+
+if(verification){
+    return res.status(200).json({message:"new access token created",accessToken:newaccessToken});
+}
+}catch(err){
+     return res.status(500).json({message:err.message});
+}
+})
 module.exports=router;
