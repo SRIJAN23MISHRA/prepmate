@@ -1,7 +1,7 @@
 const express=require("express");
 const jwt=require("jsonwebtoken");
 const router=express.Router();
-
+const authMiddleware=require("../middleware/authMiddleware");
 const bcrypt=require("bcryptjs");
 const User=require("../models/User");
 
@@ -68,6 +68,7 @@ if(!cookie){
 }
 try{
 const verification=jwt.verify(cookie,process.env.JWT_REFRESH_SECRET);
+// jwt.verify() does two things: (1) confirms the token is legit/not expired, and (2) decodes and returns that same original payload object you embedded back at login — the exact same { userid: "..." } shape, just handed back to you now.
 const userid=verification.userid;
 const newaccessToken=jwt.sign({userid:userid},process.env.JWT_ACCESS_SECRET,{expiresIn:"15m"});
 
@@ -78,4 +79,17 @@ if(verification){
      return res.status(500).json({message:err.message});
 }
 })
+router.get("/me",authMiddleware,async(req,res)=>{
+      return  res.status(200).json({message:"you are authenticated",userid:req.userid});
+})
+router.post("/logout",(req,res)=>{
+    res.clearCookie('refreshToken', {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  
+})
+return res.status(200).json({message:'logged out successfully'});
+
+});
+
 module.exports=router;
