@@ -34,4 +34,13 @@ route.put("/:id",authMiddleware,async(req,res)=>{
       return res.status(500).json({message:err.message});
    }
 })
+route.delete("/:id",authMiddleware,async(req,res)=>{
+   try{
+   const detailToBeDeleted=req.params.id;
+   const specificData=await Topic.findByIdAndDelete(detailToBeDeleted);
+    return res.status(200).json({message:"data deleted:",specificData});
+}catch(err){
+   return res.status(500).json({message:err.message});
+}
+})
 module.exports=route;
