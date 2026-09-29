@@ -24,4 +24,14 @@ route.get("/",authMiddleware,async(req,res)=>{
    }
 
 })
+route.put("/:id",authMiddleware,async(req,res)=>{
+   try{
+        const detail=req.params.id;
+        const specificOne=await Topic.findByIdAndUpdate(detail,req.body,{new:true});
+        return res.status(200).json({message:"updated data:",specificOne});
+   }
+   catch(err){
+      return res.status(500).json({message:err.message});
+   }
+})
 module.exports=route;
