@@ -10,7 +10,7 @@ if(!removeBearer){
 }
 try{
 const verification=jwt.verify(removeBearer,process.env.JWT_ACCESS_SECRET);
- req.userid=verification.userid;
+ req.userId=verification.userid;
 next();
 
 }catch(err){
