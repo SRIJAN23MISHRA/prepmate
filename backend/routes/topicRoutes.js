@@ -14,4 +14,14 @@ route.post("/",authMiddleware,async(req,res)=>{
           return res.status(500).json({message:err.message});
        }
 })
+route.get("/",authMiddleware,async(req,res)=>{
+   try{
+      const user=req.userId;
+     const specificTopic=await Topic.find({user:user});
+   return res.status(200).json({message:"specific topics are:",specificTopic});
+   }catch(err){
+         return res.status(500).json({message:err.message});
+   }
+
+})
 module.exports=route;
