@@ -1,5 +1,6 @@
 const authRoutes=require("./routes/authRoutes.js");
 const topicRoutes=require("./routes/topicRoutes.js");
+const noteRoutes=require("./routes/noteRoutes.js");
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth',authRoutes);
 app.use("/api/topics",topicRoutes);
+app.use("/api/notes",noteRoutes);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
