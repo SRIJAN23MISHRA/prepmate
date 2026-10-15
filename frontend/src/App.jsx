@@ -7,6 +7,7 @@ import Signup from './pages/Signup'
 import Login from './pages/Login'
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import Topics from './pages/Topics'
 function App() {
   const {accessToken}=useContext(AuthContext);
 
@@ -14,7 +15,7 @@ function App() {
     <Signup/>
     <Login/>
     {accessToken ? "logged in":"logged out"}
-    
+    <Topics/>
   </div>
 
 }
