@@ -7,6 +7,18 @@ function Topics(){
     const {accessToken}=useContext(AuthContext);
     const [topics,setTopics]=useState([]);
     const [name,setTopicName]=useState("");
+   const handleDelete=async(id)=>{
+        try{
+         await axios.delete(`/api/topics/${id}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+         setTopics(topics.filter((t)=>
+            t._id!=id));
+         }
+        catch(err){
+             console.log(err.response?.data);
+             
+        }
+    };
+       
     const handleTopic=async(e)=>{
         e.preventDefault();
       try{
@@ -42,7 +54,10 @@ function Topics(){
             <button type="submit">Add</button>
         </form>
      {topics.map((t)=>
-     <p key={t._id}>{t.name}</p>
+     <div key={t._id}>
+        <span>{t.name}</span>
+     <button onClick={()=>handleDelete(t._id)}>Delete</button>
+     </div>
      )}
      
     </div>
