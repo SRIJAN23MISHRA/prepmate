@@ -4,12 +4,18 @@ import { AuthContext } from "../context/AuthContext";
 
 function Notes(){
     const[note,setNote]=useState([]);
-   
+    const[topics,setTopics]=useState([]);
+    const[title,setTitle]=useState("");
+    const[content,setContent]=useState("");
     const {accessToken}=useContext(AuthContext);
+    const[topicId,setTopic]=useState("");
+
     useEffect(()=>{
        const getNotes=async()=>{
         try{
          const response=await axios.get("/api/notes",{headers:{Authorization:`Bearer ${accessToken}`}});
+         const topicGet=await axios.get("/api/topics",{headers:{Authorization:`Bearer ${accessToken}`}});
+         setTopics(topicGet.data.specificTopic);
          setNote(response.data.findNote);
 
         }catch(err){
@@ -22,7 +28,19 @@ function Notes(){
             getNotes();
         }
     },[accessToken])
-
+const handleSubmit=async (e)=>{
+    e.preventDefault();
+    try{
+        const response=await axios.post("/api/notes",{title:title,content:content,topic:topicId},{headers:{Authorization:`Bearer ${accessToken}`}});
+          setNote([...note,response.data.newOne]);
+          setTitle("");
+          setContent("");
+          setTopic("");
+    }catch(err){
+        console.log(err.response?.data);
+        
+    }
+}
 return <>
 <div>
 
@@ -31,7 +49,23 @@ return <>
         <span>{n.title}</span>
         <span>{n.content}</span>
         </div>
+
 )}
+<form  onSubmit={handleSubmit}>
+<input type="text" value={title} placeholder="Title" onChange={(e)=>setTitle(e.target.value)} />
+<input type="text" value={content} placeholder="Content" onChange={(e)=>setContent(e.target.value)}/>
+<select required name="topic" value={topicId} onChange={(e)=>setTopic(e.target.value)} id="topic-select">
+    <option value="">Choose a topic</option>
+    {topics.map((t)=>
+        <option key={t._id} value={t._id}>
+            {t.name}
+        </option>
+    )}
+   
+</select>
+ 
+ <button type="submit">Add note</button>
+ </form>
 </div>
 </>
 }
