@@ -9,17 +9,33 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import Topics from './pages/Topics'
 import Notes from './pages/Notes'
+import {BrowserRouter,Routes,Route,Link} from 'react-router-dom';
+
 function App() {
   const {accessToken}=useContext(AuthContext);
 
-  return <div>Prepmate
-    <Signup/>
-    <Login/>
+  return(
+  <BrowserRouter>
+  <div>Prepmate
+    
     {accessToken ? "logged in":"logged out"}
-    <Topics/>
-    <Notes/>
+    
+    <nav>
+      <Link to="/login" >Login</Link>
+      <Link to="/signup" >Signup</Link>
+      <Link to="/topics">Topics</Link>
+      <Link to="/notes">Notes</Link>
+    </nav>
+    <Routes>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/signup" element={<Signup/>}/>
+      <Route path="/topics" element={<Topics/>}/>
+      <Route path="/notes" element={<Notes/>}/>
+    </Routes>
+   
   </div>
-
+</BrowserRouter>
+  );
 }
 
 export default App
