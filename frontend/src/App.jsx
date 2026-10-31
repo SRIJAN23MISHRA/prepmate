@@ -9,11 +9,13 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import Topics from './pages/Topics'
 import Notes from './pages/Notes'
-import {BrowserRouter,Routes,Route,Link} from 'react-router-dom';
+import {BrowserRouter,Routes,Route,Link,Navigate} from 'react-router-dom';
 
 function App() {
-  const {accessToken}=useContext(AuthContext);
-
+  const {accessToken,loading}=useContext(AuthContext);
+  if(loading){
+    return <div className='loading screen'>Loading...</div>
+  }
   return(
   <BrowserRouter>
   <div>Prepmate
@@ -29,8 +31,8 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login/>}/>
       <Route path="/signup" element={<Signup/>}/>
-      <Route path="/topics" element={<Topics/>}/>
-      <Route path="/notes" element={<Notes/>}/>
+      <Route path="/topics" element={accessToken?<Topics/>:<Navigate to="/login"/>}/>
+      <Route path="/notes" element={accessToken?<Notes/>:<Navigate to="/notes"/>}/>
     </Routes>
    
   </div>
