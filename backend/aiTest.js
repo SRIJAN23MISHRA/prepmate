@@ -7,11 +7,14 @@ const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 async function main() {
     try{
   const response = await ai.models.generateContent({
-    model: 'gemini-3.8-flash',
+    model: 'gemini-3.6-flash',
     contents: 'Why is the sky blue?',
     
-  });}catch(err){
-  console.log(response.text);
+  });
+   console.log(response.text);
+   
+}catch(err){
+  console.log(err.message);
   }
 }
 
