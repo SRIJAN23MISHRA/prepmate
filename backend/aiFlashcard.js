@@ -4,6 +4,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 const note=   "A process is a program in execution with its own memory space. A thread is a smaller unit of execution inside a process, and threads of the same process share its memory. Threads are cheaper to create and switch between than processes, but a bug in one thread can crash the whole process."
+
 async function main() {
     console.log("1:main started");
     
@@ -22,8 +23,10 @@ config: {
     
   });
    console.log("2: got a response");
-   const rawText=response.text;
+  //  const rawText=response.text;
+  const rawText='{"a":1}';
     const cards = JSON.parse(rawText);
+    validateCards(cards);
 
         console.log(`Total cards: ${cards.length}`);
         console.log(`First card question: ${cards[0].question}`);
